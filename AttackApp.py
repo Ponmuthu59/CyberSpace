@@ -13,7 +13,8 @@ import platform
 import re
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio.run(app, debug=True, allow_unsafe_werkzeug=True)
+
 
 # Define the path to the images directory
 IMAGE_FOLDER = os.path.join(app.root_path, 'static/images')
