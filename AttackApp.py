@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, render_template, send_file, send_from_directory, jsonify
 from flask_socketio import SocketIO
 import socket
@@ -7,7 +8,6 @@ import paramiko
 import io
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-import os
 import subprocess
 import platform
 import re
@@ -15,7 +15,12 @@ import re
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode='eventlet')
 
-socketio.run(app, host="0.0.0.0", port=port)
+# Get the port from environment variable or use a default (e.g., 5000)
+port = int(os.getenv("PORT", 5000))
+
+if __name__ == "__main__":
+    socketio.run(app, host="0.0.0.0", port=port)
+
 
 
 
