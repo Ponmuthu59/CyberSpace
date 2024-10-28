@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Network Scanner</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* styles.css */
+        #loading {
+            display: none; /* Hidden by default */
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000; /* On top of other elements */
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .topn {
+            justify-content: center;
+            display: flex;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        #scan-btn {
+            margin-left: 45%;
+            text-align: center;
+            border: none;
+            background-color: orangered;
+            color: black;
+            border-radius: 7px;
+            font-weight: 600;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        #results {
+            justify-content: center;
+            text-align: center;
+            margin-top: 25px;
+            background-color: black;
+            border: none;
+            border-radius: 7px;
+            color: white;
+            width: 100%;
+            padding: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: darkslategray;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="topn">Network Scanner</h1>
+    <button id="scan-btn">Scan Network</button>
+    
+    <div id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="results">
+        <table>
+            <thead>
+                <tr>
+                    <th>IP Address</th>
+                    <th>MAC Address</th>
+                    <th>Hostname</th>
+                </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#scan-btn').click(function() {
+                $('#loading').show(); // Show loading spinner
+                $('#results-body').empty(); // Clear previous results
+                
+                $.post('/scan', function(data) {
+                    $('#loading').hide(); // Hide loading spinner
+                    let results = data.results;
+                    results.forEach(function(device) {
+                        $('#results-body').append(`<tr><td>${device.ip}</td><td>${device.mac}</td><td>${device.hostname}</td></tr>`);
+                    });
+                }).fail(function() {
+                    $('#loading').hide(); // Hide loading spinner
+                    $('#results-body').append('<tr><td colspan="3">Error scanning the network.</td></tr>');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

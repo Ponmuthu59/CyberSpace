@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penetration Testing Application</title>
+    <link rel="stylesheet" href="CSS1.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+</head>
+<style>body {
+    font-family: "Open Sans", sans-serif;
+    max-width: 1200px;
+    align-items: center;
+    margin: 0 auto;
+  }
+  
+  .topic{
+      font-size: 50px;
+      margin-left: 14%;
+      margin-bottom: 8%;
+      padding-top: 40px;
+  }
+  
+  .box{
+      background-color: rgb(239, 238, 238);
+      padding-top: 12px;
+      padding-bottom: 12px;
+      padding-left: 15px;
+      margin-top: 15px;
+      border-radius: 18px;
+  }
+  
+  
+  .box input[type=text]{
+      border: none;
+      border-bottom: 1px solid black;
+      outline: none;
+      padding: 5px;
+      font-size: 16px;
+      margin-left: 3px;
+      background-color: rgb(239, 238, 238);
+      font-weight: 500;
+  }
+  
+  
+   .stopic{
+      font-size: 20px;
+  }
+  
+  #target_ip{
+      margin-left: 0px;
+  }
+  
+  #port_range{
+      margin-left: 25px;
+      margin-top: 10px;
+  }
+   .btn1{
+      margin-top: 2%;
+      margin-bottom: 1%;
+      width: 200px;
+      height: 35px;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      background-color: black;
+      border-radius: 10px;
+   }
+  
+   #ssh_ip{
+      margin-left: 15px;
+   }
+  
+   #username{
+      margin-top: 9px;
+   }
+  
+   #password_list{
+      margin-top: 20px;
+   }
+  
+   #threads_count{
+      margin-top: 13px;
+   }
+  
+   #request_limit{
+      margin-top: 10px;
+   }
+  
+   .box input[type="number"]{
+      border: none;
+      border-bottom: 1px solid black;
+      outline: none;
+      padding: 8px;
+      font-size: 16px;
+      background-color: rgb(239, 238, 238);
+   }
+  
+  .boxtop{
+     display: flex;
+  }
+  
+  .boxtop > div{
+     align-items: center;
+  }
+  
+  .sqlinject,
+  .portscan,
+  .ddos,
+  .bruteforce,
+  .xss,
+  .scanner{
+     border: 2px solid black;
+     width: 74%;
+     height: 100%;
+     padding-left: 9px;
+     padding-top: 7px;
+     text-align: center;
+     cursor: pointer;
+  }
+  
+  .sqlinject img,
+  .portscan img,
+  .ddos img,
+  .bruteforce img,
+  .xss img,
+  .scanner img{
+     padding-left:0%;
+  }
+  
+  .boxtop{
+     grid-template-columns:repeat(2, 1fr) ;
+     grid-template-rows:repeat(5, auto);
+  }
+  
+  @media only screen and (min-width: 1200px) {
+     .boxtop {
+       grid-template-columns: repeat(5, 1fr);
+       grid-template-rows: repeat(2, auto);
+     }
+   }
+  
+   
+  .backtop2{
+     font-weight: 700;
+     background-color: rgb(88, 88, 88);
+     border-radius: 7px;
+     text-align: center;
+     padding-top: 1px;
+     padding-bottom: 1px;
+     margin-top: 15px;
+     cursor: pointer;
+  }
+  .boxtop {
+    font-weight: 700;
+     border-radius: 7px;
+    display: grid;
+    grid-gap: 15px; /* Space between boxes */
+    padding: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    padding-top: 1px;
+     padding-bottom: 1px;
+     margin-top: 15px;
+     cursor: pointer;
+}
+  
+  .us{
+     background-color: rgb(239, 238, 238);
+     border-radius: 7px;
+     padding-top: 7px;
+     padding-bottom: 7px;
+     padding-left: 15px;
+     display: flex;
+  }
+  
+  /* Chat CSS */
+  .chat {
+     max-width: 1200px;
+     align-items: center;
+  }
+  
+  /* Chat Icon Style */
+  .chatbox-toggle {
+     bottom: 20px; /* Distance from the bottom */
+     right: 20px;  /* Distance from the right */
+     position: fixed;
+     background-color: transparent;
+     border: none;
+     cursor: pointer;
+     z-index: 1000;
+  }
+  
+  .chatbox-toggle img {
+     width: 50px;
+     height: 50px;
+     transition: transform 0.3s ease; /* Smooth hover effect */
+  }
+  
+  .chatbox-toggle img:hover {
+     transform: scale(1.1); /* Slightly enlarge the icon on hover */
+  }
+  
+  /* Chatbox Container */
+  .chatbox-container {
+     bottom: 90px; /* Adjusted to sit above the chat icon */
+     right: 20px;  /* Align with the chat icon */
+     position: fixed;
+     width: 350px;
+     height: 500px; /* Slightly taller */
+     background-color: white;
+     border: 2px solid #ddd;
+     border-radius: 10px;
+     display: none; /* Initially hidden */
+     z-index: 999;
+     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Enhanced shadow for better visibility */
+     overflow: hidden;
+  }
+  
+  /* Chatbox Iframe */
+  .chatbox-container iframe {
+     border-radius: 10px; /* Match the container's border radius */
+     height: 100%;
+     width: 100%;
+     border: none;
+  }
+  
+  /* Chatbox Header */
+  .chat-header {
+     background-color: #007bff;
+     color: white;
+     padding: 10px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     border-top-left-radius: 10px;
+     border-top-right-radius: 10px;
+  }
+  
+  .chat-header h3 {
+     margin: 0;
+  }
+  
+  .chat-header #close-btn {
+     cursor: pointer;
+     font-size: 20px;
+     color: white;
+  }
+  
+  /* Chat Content */
+  .chat-content {
+     padding: 10px;
+     height: 350px;
+     overflow-y: auto;
+     background-color: #f9f9f9;
+  }
+  
+  /* Chat Footer */
+  .chat-footer {
+     padding: 10px;
+     border-top: 1px solid #ddd;
+     display: flex;
+  }
+  
+  .chat-footer input {
+     flex-grow: 1;
+     padding: 5px;
+     border: 1px solid #ddd;
+     border-radius: 5px;
+     margin-right: 5px;
+  }
+  
+  .chat-footer button {
+     background-color: #007bff;
+     color: white;
+     border: none;
+     padding: 5px 10px;
+     cursor: pointer;
+     border-radius: 5px;
+  }
+  
+  .chat-footer button:hover {
+     background-color: #0056b3;
+  }
+
+  .bruteforce{
+    padding-bottom: 0.5%;
+  }
+  .xss{
+    padding-bottom: 1%;
+  }
+  .typer {
+            font-family: monospace;
+            font-size: 24px;
+            white-space: pre-wrap; /* Preserve whitespace and allow text to wrap */
+            overflow: hidden; /* Hides overflow text */
+            width: 1000px; /* Set a width to see the wrapping effect */
+            margin-bottom: 10%;
+        }
+        .second-line {
+            padding-top: 50px; /* Add padding at the top */
+            padding-left: 90px; /* Add padding to the left */
+            display: block; /* Makes this line a block element */
+        }
+  </style>
+  <script>
+    // <!-- SQL Injection Main Displaying -->
+    
+    function sqlclick() {
+      // Get the container where inner HTML will be displayed
+      const innerContent = document.getElementById("innerContent");
+      
+      // Set the inner HTML content
+      innerContent.innerHTML = `
+           <div class="box" id="sql1">
+    <h2 class="stopic">SQL Injection Testing</h2>
+    <form action="/test_sql_injection" method="POST">
+    <label for="sql_url" class="sub1">Enter URL for SQL Injection Test:</label>
+    <input type="text" id="sql_url" name="url" class="sub2" required><br>
+    <button type="submit" class="btn1">Test SQL Injection</button>
+    </form>
+    </div>
+      `;
+      
+      // Show the inner content
+      innerContent.style.display = "block"; // Change to "block" to make it visible
+    }
+    
+    // <!-- Port Scanning Form -->
+    
+    function psclick() {
+    // Get the container where inner HTML will be displayed
+    const innerContent = document.getElementById("innerContent");
+    
+    // Set the inner HTML content
+    innerContent.innerHTML = `
+                <div class="box" id="psn1">
+                <h5>Scan Ports</h5>
+                <form action="/scan_ports" method="POST">
+                        <label for="target_ip">Target IP:</label>
+                        <input type="text" class="form-control" id="target_ip" name="target_ip" required><br>
+                        <label for="port_range">Port Range (e.g., 20-80):</label>
+                        <input type="text" class="form-control" id="port_range" name="port_range" required><br>
+                    <button type="submit" class="btn1">Scan Ports</button>
+                </form>
+            </div>
+    `;
+    
+    // Show the inner content
+    innerContent.style.display = "block"; // Change to "block" to make it visible
+    }
+    
+    
+    // <!-- SSH Brute Force Attack Form -->
+    
+    function bfclick() {
+      // Get the container where inner HTML will be displayed
+      const innerContent = document.getElementById("innerContent");
+      
+      // Set the inner HTML content
+      innerContent.innerHTML = `
+           <div class="box" id="bf1">
+    <h2 class="stopic">SSH Brute Force Attack</h2>
+    <form action="/ssh_brute_force" method="POST">
+    <label for="ssh_ip">Enter Target IP:</label>
+    <input type="text" id="ssh_ip" name="target_ip" required><br>
+    <label for="username">Enter Username:</label>
+    <input type="text" id="username" name="username" required><br>
+    <label for="password_list" id="list_name">Enter Password List (comma separated):</label>
+    <input type="text" id="password_list" name="password_list" required><br>
+    <button type="submit" class="btn1">Start SSH Brute Force Attack</button>
+    </form>
+    </div>
+    
+      `;
+      
+      // Show the inner content
+      innerContent.style.display = "block"; // Change to "block" to make it visible
+    }
+    
+    
+    
+    // <!-- Denial of Service (DoS) Attack Form -->
+    
+    function dosclick() {
+      // Get the container where inner HTML will be displayed
+      const innerContent = document.getElementById("innerContent");
+      
+      // Set the inner HTML content
+      innerContent.innerHTML = `
+          <div class="box" id="dos1">
+    <h2 class="stopic">Denial of Service (DoS) Attack</h2>
+    <form action="/dos_attack" method="POST">
+    <label for="dos_url">Enter Target URL:</label>
+    <input type="text" id="dos_url" name="target_url" required><br>
+    <label for="threads_count">Number of Threads:</label>
+    <input type="number" id="threads_count" name="threads_count" min="1" value="5" required><br>
+    <label for="request_limit">Number of Requests Per Thread:</label>
+    <input type="number" id="request_limit" name="request_limit" min="1" value="100" required><br>
+    <button type="submit" class="btn1">Start DoS Attack</button>
+    </form>
+    </div>
+      `;
+      
+      // Show the inner content
+      innerContent.style.display = "block"; // Change to "block" to make it visible
+    }
+    
+    
+    
+    // <!-- XSS Testing Form -->
+    
+    function xssclick() {
+      // Get the container where inner HTML will be displayed
+      const innerContent = document.getElementById("innerContent");
+      
+      // Set the inner HTML content
+      innerContent.innerHTML = `
+      <div class="box box5" id="xss1">
+        <h2 class="stopic">Cross-Site Scripting (XSS) Testing</h2>
+        <form action="/test_xss" method="POST">
+            <label for="xss_url">Enter URL for XSS Test:</label>
+            <input type="text" id="xss_url" name="url" required><br>
+            <button type="submit" class="btn1">Test XSS</button>
+        </form>
+        </div>
+      `;
+      
+      // Show the inner content
+      innerContent.style.display = "block"; // Change to "block" to make it visible
+    }
+    
+    
+    // MOVE TO TOP SCROLLING
+    
+    function movetop() {
+      const targetElement = document.getElementById("up1");
+      smoothScrollTo(targetElement);
+    }
+    
+    
+    // function for smooth scroll
+    
+    function smoothScrollTo(element) {
+      const targetPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const startPosition = window.pageYOffset;
+      const distance = targetPosition - startPosition;
+      const duration = 1000; // Duration in milliseconds
+      let startTime = null;
+    
+      function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1); // Clamp progress to 1
+    
+        // Easing function for smooth scrolling
+        const easing = Math.sin(progress * (Math.PI / 2)); // Easing for smoother effect
+    
+        window.scrollTo(0, startPosition + distance * easing);
+    
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        }
+      }
+    
+      requestAnimationFrame(animation);
+    }
+    
+    
+    // FOR CHATTING
+    
+    document.addEventListener("DOMContentLoaded", function() {
+                // Show the chat box when the chat icon is clicked
+                document.getElementById("chat-icon").addEventListener("click", function() {
+                    document.getElementById("chat-box").style.display = "block";
+                });
+    
+                // Hide the chat box when the close button is clicked
+                document.getElementById("close-btn").addEventListener("click", function() {
+                    document.getElementById("chat-box").style.display = "none";
+                });
+    
+                // Add event listener to the send button
+                document.getElementById("send-btn").addEventListener("click", function() {
+                    // Get the value of the input field
+                    const userInput = document.getElementById("chat-input").value;
+                    
+                    // Check if the input is not empty
+                    if (userInput.trim() !== "") {
+                        // Create a new paragraph element for the message
+                        const messageElement = document.createElement("p");
+                        
+                        // Set the message text to the user input
+                        messageElement.textContent = userInput;
+                        
+                        // Append the new message to the chat content
+                        document.getElementById("chat-content").appendChild(messageElement);
+                        
+                        // Clear the input field
+                        document.getElementById("chat-input").value = "";
+                        
+                        // Automatically scroll the chat content to the bottom
+                        const chatContent = document.getElementById("chat-content");
+                        chatContent.scrollTop = chatContent.scrollHeight;
+                    }
+                });
+    
+                // Add event listener for Enter key in input field
+                document.getElementById("chat-input").addEventListener("keypress", function(event) {
+                    if (event.key === "Enter") {
+                        document.getElementById("send-btn").click(); // Trigger the send button
+                    }
+                });
+            });
+    </script>
+<body>
+   
+    <h1 class="topic" id="up1">Penetration Testing Application</h1>
+
+    <div class="typer">
+        NOTE : <span id="typerBox"></span><span class="cursor" id="cursor"></span>
+    </div>
+
+    <script>
+        const text = "This is a Penetration Testing Website in which You can under go with Cyber attaks and prevention, Only for educational purporse."; // Text to type
+        const speed = 60; // Typing speed in milliseconds
+        const typerBox = document.getElementById('typerBox');
+
+        let index = 0;
+        let lineBreakIndex = 0; // Track where to add the line break
+        const maxLineWidth = 400; // Set the maximum line width for wrapping
+
+        function type() {
+            if (index < text.length) {
+                // Append the character to the typerBox
+                typerBox.textContent += text.charAt(index);
+                index++;
+
+                // Check if the current text width exceeds the maximum line width
+                if (typerBox.scrollWidth > maxLineWidth) {
+                    // Add padding for the second line
+                    if (lineBreakIndex === 0) {
+                        lineBreakIndex = index; // Record the index for the line break
+                        typerBox.innerHTML += '<span class="second-line"></span>'; // Create space for the second line
+                    }
+
+                    // Move the cursor back to the recorded index to continue typing on the new line
+                    const secondLine = document.querySelector('.second-line');
+                    secondLine.textContent += text.charAt(index);
+                    index++; // Move to the next character
+                }
+
+                setTimeout(type, speed);
+            }
+        }
+
+        // Start typing after a short delay
+        setTimeout(type, 500);
+    </script>
+
+    <div class="boxtop">
+
+        <div class="sqlinject" onclick="sqlclick();">
+            <img src="{{ url_for('static', filename='images/sql2.png') }}" style="width: 100px; height: 90px;">
+            <p>SQL Injection</p>
+        </div>
+
+        <div class="portscan" onclick="psclick();">
+            
+            <img src="{{ url_for('static', filename='images/PT1.webp') }}" style="width: 100px; height: 90px;">
+            <p>Port Scanning</p>
+        </div>
+
+        <div class="bruteforce" onclick="bfclick();">
+            <img src="{{ url_for('static', filename='images/bruteforce1.jpg') }}" style="width: 80px; height: 60px; padding-top: 8px; padding-bottom: 16px;">
+            <p>SSH brute force attack</p>
+        </div>
+
+        <div class="ddos" onclick="dosclick();">
+            <img src="{{ url_for('static', filename='images/ddos1.png') }}" style="width: 80px; height: 90px;">
+            <p>DOS attack</p>
+        </div>
+
+        <div class="xss" onclick="xssclick();">
+            <img src="{{ url_for('static', filename='images/XSS.png') }}" style="width: 80px; height: 60px; padding-top: 8px; padding-bottom: 10px;">
+            <p>XSS attack</p>
+        </div>
+        <div class="scanner" onclick="window.location.href='{{ url_for('scanner_home') }}';" style="cursor: pointer;">
+            <img src="{{ url_for('static', filename='images/NTSN1.png') }}" 
+                 alt="Scanner Icon" 
+                 style="width: 80px; height: 60px; padding-top: 8px; padding-bottom: 10px;">
+            <p>Scanner</p> <!-- Added text to make it visible -->
+        </div>
+        
+        
+        
+         
+     </div>
+<br>
+<br>
+    <div class="inner-content" id="innerContent">
+        <!-- Inner HTML will be inserted here -->
+      </div>
+
+      <!-- Chatbox Toggle Button -->
+<button class="chatbox-toggle" onclick="toggleChatbox()">
+    <img src="{{ url_for('static', filename='images/msg2.png') }}" alt="Chat Icon" width="50px">
+  </button>
+  
+  <!-- Botpress Chat Widget -->
+  <div class="chatbox-container" id="chatbox" style="display:none;">
+      <iframe 
+          src="https://cdn.botpress.cloud/webchat/v2/shareable.html?botId=8f9a7147-0c26-4cc0-bd21-90a4ec67f505" 
+          width="100%" 
+          height="100%" 
+          style="border:none;">
+      </iframe>
+  </div>
+  
+  <script>
+      function toggleChatbox() {
+          const chatbox = document.getElementById('chatbox');
+          chatbox.style.display = chatbox.style.display === 'none' || chatbox.style.display === '' ? 'block' : 'none';
+      }
+  </script>
+  
+
+<br>
+<br>
+<div class="down">
+    <div class="backtop2" onclick="movetop()">
+        <p>Back to Top</p>
+    </div>
+    <div class="us">
+        <div class="about">
+            <p style="font-weight: 600;">Done By</p>
+            <p>Hariram J M</p>
+            <p>Ponmuthee</p>
+            <p>Roshan</p>
+        </div>
+        <div class="lang" style="padding-left: 5%;">
+            <p style="font-weight: 600;">Languages used</p>
+            <p>HTML</p>
+            <p>CSS</p>
+            <p>Python</p>
+        </div>
+    </div>
+</div>
+  
+
+<script src="JS.js"></script>
+</body>
+</html>
