@@ -4,3 +4,4 @@ requests
 paramiko
 reportlab
 gunicorn
+eventlet>=0.24.1
