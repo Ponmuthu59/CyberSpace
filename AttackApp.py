@@ -12,8 +12,14 @@ import subprocess
 import platform
 import re
 
+# Get the port from the environment variable, with a default fallback
+port = int(os.environ.get("PORT", 5000))
+
+# Run the application with socketio, specifying the port
+
+
 app = Flask(__name__)
-socketio.run(app, debug=True, allow_unsafe_werkzeug=True)
+socketio.run(app, host="0.0.0.0", port=port)
 
 
 # Define the path to the images directory
